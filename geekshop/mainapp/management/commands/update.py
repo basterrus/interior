@@ -1,34 +1,43 @@
 from django.core.management.base import BaseCommand
-from mainapp.models import Product, ProductCategory
-import json
-from django.conf import settings
+
 from authapp.models import UserProfile
+from mainapp.models import ProductCategory, Product
+from django.contrib.auth.models import User
+import json
 
 
-def load_file(file_name):
-    with open(f'{settings.BASE_DIR}/json_upload/{file_name}.json', 'r') as file:
+def load_json(file_name):
+    with open(f'json_upload/{file_name}.json', 'r', encoding='utf-8') as file:
         return json.load(file)
 
 
+def clear_db():
+    ProductCategory.objects.all().delete()
+    Product.objects.all().delete()
+    print('База очищена!')
+
+
 class Command(BaseCommand):
+
     def handle(self, *args, **options):
-        categories = load_file('categories')
-        products = load_file('products')
+        clear_db()
 
-        # Clear categories in DB and load new data from JSON
-        ProductCategory.objects.all().delete()
-        for category in categories:
-            ProductCategory.objects.create(**category)
-
-        # Clear products in DB and load new data from JSON
-        Product.objects.all().delete()
+        categories = load_json('categories')
+        print(categories)
+        products = load_json('products')
+        print(products)
         try:
+            for category in categories:
+                ProductCategory.objects.create(**category)
+
             for product in products:
                 category_name = product["category"]
                 category_item = ProductCategory.objects.get(name=category_name)
                 product["category"] = category_item
                 Product.objects.create(**product)
-        except Exception:
-            print('какая то ошибка не могу понять? но в базу сохраняет')
 
-        UserProfile.objects.create_superuser('django',  password='geekbrains', age=33)
+        except Exception:
+            print('Какая та ошибка')
+
+        super_user = UserProfile.objects.create_superuser('django', 'django@geekshop.local', 'geekbrains', age=19)
+        print(f'Пользователь {super_user} создан успешно!')
