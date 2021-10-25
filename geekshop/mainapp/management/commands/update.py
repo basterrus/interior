@@ -2,7 +2,6 @@ from django.core.management.base import BaseCommand
 
 from authapp.models import UserProfile
 from mainapp.models import ProductCategory, Product
-from django.contrib.auth.models import User
 import json
 
 
@@ -23,9 +22,7 @@ class Command(BaseCommand):
         clear_db()
 
         categories = load_json('categories')
-        print(categories)
         products = load_json('products')
-        print(products)
         try:
             for category in categories:
                 ProductCategory.objects.create(**category)
@@ -39,5 +36,5 @@ class Command(BaseCommand):
         except Exception:
             print('Какая та ошибка')
 
-        super_user = UserProfile.objects.create_superuser('django', 'django@geekshop.local', 'geekbrains', age=19)
+        super_user = UserProfile.objects.create_superuser('django', 'django@geekshop.local', 'geekbrains', age=18)
         print(f'Пользователь {super_user} создан успешно!')
