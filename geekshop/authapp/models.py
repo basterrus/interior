@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 
 
 class UserProfile(AbstractUser):
@@ -10,5 +11,3 @@ class UserProfile(AbstractUser):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователь'
         # abstract = True
-
-
