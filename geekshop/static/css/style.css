@@ -692,7 +692,6 @@ html, body {
 	top: 63px;
 	/*left: 1176px;*/
 	left: 1151px;
-    background-repeat: no-repeat;
 }
 .basket {
 	display: block;
@@ -704,9 +703,7 @@ html, body {
 	/*left: 1210px;*/
 	left: 1185px;
     text-decoration: none;
-    background-repeat: no-repeat;
-    color: red;
-    padding-left: 25px;
+    color: #555;
 }
 
 .basket span {
