@@ -30,3 +30,4 @@ class Product(models.Model):
         verbose_name = 'Продукты'
         verbose_name_plural = 'Продукты'
         ordering = ('-id',)
+

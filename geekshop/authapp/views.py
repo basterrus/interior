@@ -5,9 +5,11 @@ from django.urls import reverse
 
 
 def login(request):
-    title = 'ВХОД'
+    title = 'Вход'
 
     login_form = UserLoginForm(data=request.POST)
+    next = request.GET['next'] if 'next' in request.GET.keys() else ''
+
     if request.method == 'POST' and login_form.is_valid():
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -19,7 +21,9 @@ def login(request):
 
     context = {
         'title': title,
-        'login_form': login_form}
+        'login_form': login_form,
+        'next': next,
+    }
 
     return render(request, 'authapp/login.html', context)
 
