@@ -43,7 +43,7 @@ def remove(request, pk):
 def edit(request, pk, quantity):
     if request.is_ajax():
         quantity = int(quantity)
-        basket_item = Basket.objects.get(pk=pk)
+        basket_item = Basket.objects.get(pk=int(pk))
 
         if quantity > 0:
             basket_item.quantity = quantity
@@ -58,6 +58,6 @@ def edit(request, pk, quantity):
         'basket_item': basket_item,
     }
 
-    result = render_to_string('', context)
+    result = render_to_string('basket/includes/inc_basket_list.html', context)
 
     return JsonResponse({'result': result})
