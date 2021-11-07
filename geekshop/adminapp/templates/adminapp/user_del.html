@@ -1,0 +1,16 @@
+{% extends 'adminapp/temp.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="">
+            Уверены, что хотите удалить пользователя {{ object.get_full_name }}??
+        </div>
+    <form method="post">
+    {% csrf_token %}
+        <input type="submit" class="btn btn-danger" value="Да">
+    </form>
+    <a href="{% url 'adminapp:users_list' %}" class="btn btn-success">Нет</a>
+    </div>
+
+
+{% endblock %}

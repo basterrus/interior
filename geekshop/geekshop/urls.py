@@ -6,14 +6,18 @@ from django.conf import settings
 from django.conf.urls.static import static
 import mainapp.views as mainapp
 
+
 urlpatterns = [
     path('', mainapp.main, name='main'),
     path('products/', include('mainapp.urls', namespace='products')),
-    path('contact/', mainapp.contact, name='contact'),
+    path('contacts/', mainapp.contact, name='contact'),
     path('auth/', include('authapp.urls', namespace='auth')),
-    path('auth/', include('authapp.urls', namespace='register')),
+    # path('auth/', include('authapp.urls', namespace='register')),
     path('basket/', include('basket.urls', namespace='basket')),
-    path('admin/', admin.site.urls),
+    path('admin/', include('adminapp.urls', namespace='adminapp')),
+
+    path('control/', admin.site.urls),
+
 ]
 
 
