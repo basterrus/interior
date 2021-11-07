@@ -1,0 +1,21 @@
+{% extends 'adminapp/temp.html' %}
+
+{% block content %}
+     <div class="container">
+        <h1>Карточка товара</h1>
+         <br>
+         <img src="{{ product_detail.image }}" alt="img">
+        <p>Категория:  {{ product_detail.category}}</p>
+        <br>
+        <p>Наименование товара:  {{ product_detail.name}}</p>
+        <br>
+        <p>Краткое описание:  {{ product_detail.short_desc}}</p>
+        <br>
+        <p>Описание:  {{ product_detail.description}}</p>
+        <br>
+        <p>Цена: {{ product_detail.price }}</p>
+        <br>
+        <p>Доступное количество: {{ product_detail.price }}</p>
+        <br><br>
+
+{% endblock %}

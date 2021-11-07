@@ -22,6 +22,11 @@
         <li><a href="{% url 'auth:login' %}">войти</a></li>
     {% endif %}
 
+{% if user.is_superuser %}
+    <li><a href="{% url 'adminapp:users_list' %}">Админ_панель</a></li>
+{% endif %}
+
+
 </ul>
 <a href="#" class="search"></a>
 <a href="{% url 'basket:view' %}" class="basket">

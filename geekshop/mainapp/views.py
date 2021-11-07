@@ -24,6 +24,7 @@ def get_same_products(hot_product):
 
 
 def main(request):
+
     context = {
         'title': 'Главная',
         'links_menu': Product.objects.all()[:4],
@@ -70,7 +71,7 @@ def products(request, pk=None):
     context = {
         'links_menu': links_menu,
         'title': title,
-        'hot_product':hot_product,
+        'hot_product': hot_product,
         'same_products': same_products,
         'basket': basket,
     }

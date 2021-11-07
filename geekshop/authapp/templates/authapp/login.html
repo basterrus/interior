@@ -8,7 +8,7 @@
         {% csrf_token %}
         {{ login_form.as_table }}
         <br>
-        <input type="hidden" name="next", value="{{ next }}">
+        <input type="hidden" name="next" value="{{ next }}">
         <input class="btn btn-primary" type="submit" value="ВОЙТИ">
     </form>
     <br><br>
