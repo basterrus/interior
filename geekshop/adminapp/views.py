@@ -187,7 +187,6 @@ def product_update(request, pk):
 
 @user_passes_test(lambda u: u.is_superuser)
 def product_delete(request, pk):
-
     title = 'Товар/удалить'
 
     delete_pr = get_object_or_404(Product, pk=pk)
@@ -204,14 +203,14 @@ def product_delete(request, pk):
     return render(request, 'adminapp/delete_pr.html', context)
 
 
-
 @user_passes_test(lambda u: u.is_superuser)
 def product_detail(request, pk):
     title = 'Товар/Информация'
 
     product_info = Product.objects.filter(category__pk=pk)
     context = {
-        'product_info': product_info,
-        'title': title,
+        # 'category': get_object_or_404(ProductCategory, pk=pk),
+        'object_list': Product.objects.filter(pk=pk).order_by('-is_active'),
+        'title': 'Карточка товара'
     }
     return render(request, 'adminapp/product_detail.html', context)
