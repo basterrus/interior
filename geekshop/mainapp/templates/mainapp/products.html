@@ -1,6 +1,6 @@
 {% extends 'mainapp/temp.html' %}
 {% load static %}
-
+{% load temp_tags %}
 {% block menu %}
     <div class="hero-white">
             <ul class="menu">
@@ -23,17 +23,17 @@
             </div>
             <div class="slider-control">
                 <div class="block">
-                    <a href="#"><img src="/media/{{ hot_product.image }}" alt="">
+                    <a href="#"><img src="{{ hot_product.image| media_for_products }}" alt="">
                         <div class="text"></div>
                     </a>
                 </div>
                 <div class="block">
-                    <a href="#"><img src="/media/{{ hot_product.image }}" alt="">
+                    <a href="#"><img src="{{ hot_product.image| media_for_products }}" alt="">
                         <div class="text"></div>
                     </a>
                 </div>
                 <div class="block">
-                    <a href="#"><img src="/media/{{ hot_product.image }}" alt="">
+                    <a href="#"><img src="{{ hot_product.image| media_for_products }}" alt="">
                         <div class="text"></div>
                     </a>
                 </div>

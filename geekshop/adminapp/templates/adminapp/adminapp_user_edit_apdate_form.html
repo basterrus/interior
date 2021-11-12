@@ -1,0 +1,15 @@
+{% extends 'adminapp/adminapp_base_template.html' %}
+
+{% block content %}
+    <div class="container">
+        <form class="form-horizontal" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+                {{ form.as_p }}
+                    <br><br>
+                <input type="submit" value="Сохранить" class="btn btn-primary col-lg-12">
+                    <br><br>
+                <button class="btn btn-warning col-lg-12">Назад</button>
+                    <br>
+        </form>
+    </div>
+{% endblock %}

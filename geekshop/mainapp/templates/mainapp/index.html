@@ -1,6 +1,6 @@
 {% extends 'mainapp/temp.html' %}
 {% load static %}
-
+{% load temp_tags %}
 {% block menu %}
     <div class="slider">
         <div class="header clearfix">
@@ -29,7 +29,7 @@
         <div class="tab-content">
             {% for product in links_menu %}
             <div class="block">
-                <a href="#"><img src="/media/{{ product.image }}" width="200px" height="200px" alt="img">
+                <a href="#"><img src="{{ product.image | media_for_products }}" width="200px" height="200px" alt="img">
                     <div class="text">
                         <h4>{{ product.name }}</h4>
                         <h5> {{ product.price }}руб. </h5>

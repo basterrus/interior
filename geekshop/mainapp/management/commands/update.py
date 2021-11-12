@@ -35,6 +35,3 @@ class Command(BaseCommand):
 
         except Exception:
             print('Какая та ошибка')
-
-        super_user = UserProfile.objects.create_superuser('django', 'django@geekshop.local', 'geekbrains', age=18)
-        print(f'Пользователь {super_user} создан успешно!')
