@@ -1,0 +1,19 @@
+{% extends 'adminapp/adminapp_base_template.html' %}
+{% load temp_tags %}
+{% block content %}
+     <div class="container">
+        <h2>Карточка товара</h2>
+         <br><br>
+{#         {% for el in  objects_list %}#}
+         <img src="{{ objects_list.image| media_for_products}}" alt="img" width="200"    > <br><br>
+        <p><b>Категория:   </b>&nbsp{{ objects_list.category}}</p>
+        <p><b>Наименование товара: </b>&nbsp  {{ objects_list.name}}</p>
+        <p><b>Краткое описание:  </b>&nbsp{{ objects_list.short_desc}}</p>
+        <p><b>Описание:  </b>&nbsp{{ objects_list.description}}</p>
+        <p><b>Цена: </b>&nbsp{{ objects_list.price }}</p>
+        <p><b>Доступное количество:  </b>&nbsp{{ objects_list.price }} руб. </p>
+{#    {% endfor %}#}
+    <a href="{% url 'adminapp:product_update' object.pk%}">Редактировать</a>
+     </div>
+{% endblock %}
+

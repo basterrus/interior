@@ -1,9 +1,11 @@
 import random
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from basket.models import Basket
 from django.shortcuts import render
 from mainapp.models import Product, ProductCategory
 from django.shortcuts import get_object_or_404
+from django.views.generic.list import ListView
+from django.utils.decorators import method_decorator
 
 
 def get_basket(user):
@@ -24,7 +26,6 @@ def get_same_products(hot_product):
 
 
 def main(request):
-
     context = {
         'title': 'Главная',
         'links_menu': Product.objects.all()[:4],
@@ -41,7 +42,7 @@ def contact(request):
     return render(request, 'mainapp/contact.html', context=context)
 
 
-def products(request, pk=None):
+def products(request, pk=None, page=1):
     title = 'Продукты'
     links_menu = ProductCategory.objects.all()
     basket = get_basket(request.user)
@@ -53,12 +54,22 @@ def products(request, pk=None):
                 'pk': 0,
             }
         else:
-            product_list = Product.objects.filter(category__pk=pk)
             category = get_object_or_404(ProductCategory, pk=pk)
+            product_list = Product.objects.filter(category__pk=pk)
+
+        paginator = Paginator(product_list, 2)
+
+        try:
+            product_paginator = paginator.page(page)
+        except PageNotAnInteger:
+            product_paginator = paginator.page(1)
+        except EmptyPage:
+            product_paginator = paginator.page(paginator.num_pages)
+
         context = {
             'links_menu': links_menu,
             'title': 'Продукты',
-            'product_list': product_list,
+            'product_list': product_paginator,
             'category': category,
             'basket': get_basket(request.user),
         }
