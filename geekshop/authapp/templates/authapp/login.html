@@ -3,16 +3,16 @@
 
 
 {% block content %}
-<div class="container-1">
-    <form class="form-horizontal" method="post">
+{#<div class="container">#}
+    <form class="form-vertical" method="post">
         {% csrf_token %}
-        {{ login_form.as_table }}
+        {{ login_form.as_p }}
         <br>
         <input type="hidden" name="next" value="{{ next }}">
         <input class="btn btn-primary" type="submit" value="ВОЙТИ">
     </form>
     <br><br>
-    <a href="{% url 'auth:register' %}">РЕГИСТРАЦИЯ</a>
-</div>
+    <a href="{% url 'auth:register' %}" class="ml-2">РЕГИСТРАЦИЯ</a>
+{#</div>#}
 {% endblock %}
 
