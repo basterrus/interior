@@ -8,13 +8,6 @@ from django.views.generic.list import ListView
 from django.utils.decorators import method_decorator
 
 
-def get_basket(user):
-    if user.is_authenticated:
-        return Basket.objects.filter(user=user)
-    else:
-        return []
-
-
 def get_hot_product():
     products = Product.objects.all()
     return random.sample(list(products), 1)[0]
@@ -29,7 +22,6 @@ def main(request):
     context = {
         'title': 'Главная',
         'links_menu': Product.objects.all()[:4],
-        'basket': get_basket(request.user),
     }
     return render(request, 'mainapp/index.html', context=context)
 
@@ -37,7 +29,6 @@ def main(request):
 def contact(request):
     context = {
         'title': 'Контакты',
-        'basket': get_basket(request.user),
     }
     return render(request, 'mainapp/contact.html', context=context)
 
@@ -45,7 +36,6 @@ def contact(request):
 def products(request, pk=None, page=1):
     title = 'Продукты'
     links_menu = ProductCategory.objects.all()
-    basket = get_basket(request.user)
     if pk is not None:
         if pk == 0:
             product_list = Product.objects.all()
@@ -71,7 +61,6 @@ def products(request, pk=None, page=1):
             'title': 'Продукты',
             'product_list': product_paginator,
             'category': category,
-            'basket': get_basket(request.user),
         }
 
         return render(request, 'mainapp/products_list.html', context=context)
@@ -84,7 +73,6 @@ def products(request, pk=None, page=1):
         'title': title,
         'hot_product': hot_product,
         'same_products': same_products,
-        'basket': basket,
     }
 
     return render(request, 'mainapp/products.html', context=context)
@@ -96,7 +84,6 @@ def product(request, pk):
         'links_menu': ProductCategory.objects.all(),
         'title': title,
         'product': get_object_or_404(Product, pk=pk),
-        'basket': get_basket(request.user),
     }
 
     return render(request, 'mainapp/product.html', context)

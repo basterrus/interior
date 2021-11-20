@@ -2,6 +2,11 @@ from django.shortcuts import render, HttpResponseRedirect
 from authapp.forms import UserLoginForm, UserRegisterForm, ShopUserEditForm
 from django.contrib import auth
 from django.urls import reverse
+from django.conf import settings
+from django.core.mail import send_mail
+
+from .models import UserProfile
+from .services import send_verify_email
 
 
 def login(request):
@@ -34,19 +39,24 @@ def logout(request):
 
 
 def register(request):
-    title = 'Регистрация пользователя'
 
     if request.method == 'POST':
         register_form = UserRegisterForm(request.POST, request.FILES)
+
         if register_form.is_valid():
-            register_form.save()
-            return HttpResponseRedirect(reverse('main'))
+            new_user = register_form.save()
+            if send_verify_email(new_user):
+                print('сообщение подтверждения отправлено')
+                return HttpResponseRedirect(reverse('auth:login'))
+            else:
+                print('ошибка отправки сообщения')
+                return HttpResponseRedirect(reverse('auth:login'))
     else:
         register_form = UserRegisterForm()
 
     context = {
         'register_form': register_form,
-        'title': title,
+        'title': 'Регистрация пользователя',
     }
 
     return render(request, 'authapp/register.html', context)
@@ -71,5 +81,20 @@ def edit(request):
     return render(request, 'authapp/edit.html', context)
 
 
-def delete(request):
-    return None
+# def delete(request):
+#     return None
+
+
+def verify(request, email, key):
+    user = UserProfile.objects.filter(email=email).first()
+    if user:
+        if user.activate_key == key and not user.activate_key_expired():
+            user.activate_user()
+            auth.login(request, user)
+
+    return render(request, 'authapp/register_socifull.html')
+
+
+
+
+
