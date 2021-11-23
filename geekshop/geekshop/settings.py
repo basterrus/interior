@@ -12,8 +12,8 @@ load_dotenv(dotenv_path=dot_env)
 SECRET_KEY = 'django-insecure-=s^x#l9=3v$2p_*=lcclmq@=$7$_g3=@m*xu^0_h8_aupi*t6b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = (os.getenv('DEBUG', 'False') == 'True')
+# DEBUG = True
+DEBUG = (os.getenv('DEBUG', 'False') == 'True')
 
 ALLOWED_HOSTS = ['*']
 
@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'authapp',
     'basket',
     'adminapp',
+    'social_django'
 ]
 
 MIDDLEWARE = [
@@ -133,5 +134,12 @@ EMAIL_USE_SSL = False
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = 'tmp/'
 
-# DOMAIN_NAME = os.getenv('DOMAIN_NAME')
-DOMAIN_NAME = 'http://127.0.0.1:8000'
+DOMAIN_NAME = os.getenv('DOMAIN_NAME')
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.vk.VKOAuth2',
+)
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_VK_OAUTH2_KEY')
+SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_VK_OAUTH2_SECRET')
