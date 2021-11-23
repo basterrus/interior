@@ -3,8 +3,7 @@
 
 
 {% block content %}
-{#<div class="container">#}
-    <form class="form-vertical" method="post">
+    <form class="form-vertical center-block" method="post">
         {% csrf_token %}
         {{ login_form.as_p }}
         <br>
@@ -12,7 +11,8 @@
         <input class="btn btn-primary" type="submit" value="ВОЙТИ">
     </form>
     <br><br>
-    <a href="{% url 'auth:register' %}" class="ml-2">РЕГИСТРАЦИЯ</a>
-{#</div>#}
+    <a href="{% url 'auth:register' %}" class="ml-2">Регистрация</a><br>
+    <a href="{% url 'social:begin' 'vk-oauth2' %}" class="ml-2">Вход через VK</a>
+    {#    # требует коннектор 'vk-oauth2'#}
 {% endblock %}
 

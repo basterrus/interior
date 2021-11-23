@@ -6,7 +6,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 import mainapp.views as mainapp
 
-
 urlpatterns = [
     path('', mainapp.main, name='main'),
     path('products/', include('mainapp.urls', namespace='products')),
@@ -17,6 +16,8 @@ urlpatterns = [
     path('admin/', include('adminapp.urls', namespace='adminapp')),
 
     path('control/', admin.site.urls),
+
+    path('', include('social_django.urls', namespace='social'))
 
 ]
 
