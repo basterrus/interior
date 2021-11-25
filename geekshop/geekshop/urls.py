@@ -8,6 +8,7 @@ import mainapp.views as mainapp
 
 urlpatterns = [
     path('', mainapp.main, name='main'),
+    path('', include('social_django.urls', namespace='social')),
     path('products/', include('mainapp.urls', namespace='products')),
     path('contacts/', mainapp.contact, name='contact'),
     path('auth/', include('authapp.urls', namespace='auth')),
@@ -17,7 +18,7 @@ urlpatterns = [
 
     path('control/', admin.site.urls),
 
-    path('', include('social_django.urls', namespace='social'))
+
 
 ]
 

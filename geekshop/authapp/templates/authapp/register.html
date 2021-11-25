@@ -3,16 +3,20 @@
 
 
 {% block content %}
-<div class="conteiner">
+
+<div class="container">
+    <h2 style="text-align: center">Регистрация</h2>
+    <div class="login">
     <form class="form-horizontal" action="{% url 'auth:register' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ register_form.as_table }}
+        {{ register_form.as_p }}
         <br>
         <input class="btn btn-primary" type="submit" value="ЗАРЕГИСТРИРОВАТЬСЯ">
         <br><br>
-        <a href="{% url 'auth:login' %}">ВОЙТИ</a>
+        <a class="btn btn-primary" href="{% url 'auth:login' %}">ВОЙТИ</a>
     </form>
-    <br><br>
+        </div>
+
 </div>
     <div class="user_avatar"><img src="/media/{{ user.avatar }}" width = "300px" alt="avatar"></div>
 {% endblock %}
