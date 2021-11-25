@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django import forms
 
-from authapp.models import UserProfile
+from authapp.models import UserProfile, ShopUserProfile
 
 
 class UserLoginForm(AuthenticationForm):
@@ -66,3 +66,15 @@ class ShopUserEditForm(UserChangeForm):
         if yang < 18:
             raise forms.ValidationError("Пользователь должен быть старше 18 лет!")
         return yang
+
+
+class ShopUserProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = ShopUserProfile
+        exclude = ('user', )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+            field.help_text = ''

@@ -1,17 +1,23 @@
 {% extends 'authapp/temp.html' %}
 {% load static %}
-
+{% load temp_tags %}
 
 {% block content %}
-    <div class="edit_form">
-        <form class="form-horizontal" action="{% url 'auth:edit' %}" method="post"  enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ edit_form.as_table }}
-            <br>
-            <input class="btn btn-primary" type="submit" value="СОХРАНИТЬ">
-        </form>
-    </div><br>
-    <div class="user_avatar"><img src="/media/{{ user.avatar }}/" width = "300px" alt="avatar">
+    <div class="container d-flex ">
+        <br><br>
+        <h2 style="text-align: center">Редактирование профиля</h2>
+        <div class="login">
+            <img class="form border" src="/media/{{ user.avatar| media_for_users }}" width="300px" alt="avatar">
+            <form class="form-horizontal" action="{% url 'auth:edit' %}" method="post"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ edit_form.as_table }}
+                {{ edit_profile_form.as_table }}
+                <br>
+                <input class="btn btn-primary" type="submit" value="СОХРАНИТЬ">
+
+            </form>
+        </div>
     </div>
 {% endblock %}
 

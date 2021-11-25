@@ -573,6 +573,7 @@ html, body {
 }
 
 .login {
+    padding: 30px;
     background: #fff;
     border: 1px solid #eaeaea;
     border-radius: 25px;
@@ -580,7 +581,7 @@ html, body {
     width: 28em;
     min-width: 500px;
     margin: 100px auto;
-       
+    text-align: center;
     position: relative;
     display: block;
 }
