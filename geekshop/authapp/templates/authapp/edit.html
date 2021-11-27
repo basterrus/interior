@@ -3,11 +3,14 @@
 {% load temp_tags %}
 
 {% block content %}
-    <div class="container d-flex ">
-        <br><br>
-        <h2 style="text-align: center">Редактирование профиля</h2>
+    <div class="container">
+        <p class="fs-2 text-uppercase pt-4" style="text-align: center">Редактирование профиля</p>
         <div class="login">
-            <img class="form border" src="/media/{{ user.avatar| media_for_users }}" width="300px" alt="avatar">
+            {% if user.avatar %}
+                <img class="form border" src="/media/{{ user.avatar }}" width="300px" alt="avatar">
+            {% else %}
+                <img src="{{ user.avatar_url }}" alt="img">
+            {% endif %}
             <form class="form-horizontal" action="{% url 'auth:edit' %}" method="post"
                   enctype="multipart/form-data">
                 {% csrf_token %}
@@ -15,8 +18,12 @@
                 {{ edit_profile_form.as_table }}
                 <br>
                 <input class="btn btn-primary" type="submit" value="СОХРАНИТЬ">
-
             </form>
+            <button class="btn btn-default btn-round">
+                <a href="{% url 'main' %}">
+                    на главную
+                </a>
+            </button>
         </div>
     </div>
 {% endblock %}

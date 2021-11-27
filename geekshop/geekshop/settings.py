@@ -27,7 +27,8 @@ INSTALLED_APPS = [
     'authapp',
     'basket',
     'adminapp',
-    'social_django'
+    'social_django',
+    'ordersapp',
 ]
 
 MIDDLEWARE = [
@@ -126,7 +127,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'authapp.UserProfile'
 
 LOGIN_URL = '/authapp/login/'
-LOGIN_ERROR_URL ='/'
+LOGIN_ERROR_URL = '/'
 
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_PORT = os.getenv('EMAIL_PORT')
@@ -163,4 +164,3 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
 )
-
