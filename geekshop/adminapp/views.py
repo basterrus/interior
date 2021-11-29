@@ -56,13 +56,6 @@ class UserDeleteView(AccessMixin, DeleteView):
     template_name = 'adminapp/adminapp_user_delete.html'
     success_url = reverse_lazy('adminapp:users_list')
 
-    # Усли нужно сделать не активным то сюда прописать функцию
-    # def delete(self, request, *args, **kwargs):
-    #     self.object = self.get_object()
-    #     # self.object.is_active = False
-    #     self.object.save()
-    #     return HttpResponseRedirect(self.get_success_url())
-
 
 class CategoryListView(AccessMixin, ListView):
     model = ProductCategory

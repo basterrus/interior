@@ -21,9 +21,7 @@ def get_same_products(hot_product):
 class MainView(ListView):
     form = Product
     template_name = 'mainapp/index.html'
-
-    def get_queryset(self):
-        return super(MainView, self).get_queryset().all()
+    model = Product
 
     def get_context_data(self, *args, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -32,13 +30,11 @@ class MainView(ListView):
         return context_data
 
 
-class ContactsView(ListView):
-    form = Product
-    template_name = 'mainapp/contact.html'
-
-    def get_queryset(self):
-        return super(ContactsView, self).get_queryset().all()
-
+def contacts_list(request):
+    context = {
+        'title': 'Контакты',
+    }
+    return render(request, 'mainapp/contact.html', context)
 
 class ProductsView(ListView):
     form = Product

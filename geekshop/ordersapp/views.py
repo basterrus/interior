@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.dispatch import receiver
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
@@ -7,6 +8,7 @@ from basket.models import Basket
 from ordersapp.forms import OrderItemForm
 from ordersapp.models import Order, OrderItem
 from django.forms.models import inlineformset_factory
+from django.db.models.signals import pre_save, pre_delete
 
 
 class OrderItemsListView(ListView):
@@ -35,11 +37,11 @@ class OrderItemsCreateView(CreateView):
                 for num, form in enumerate(formset.forms):
                     form.initial['product'] = basket_items[num].product
                     form.initial['quantity'] = basket_items[num].quantity
+                    form.initial['price'] = basket_items[num].price
             else:
                 formset = OrderFormSet()
 
         context_data['orderitems'] = formset
-        print(context_data)
         return context_data
 
     def form_valid(self, form):
@@ -47,13 +49,13 @@ class OrderItemsCreateView(CreateView):
         orderitems = context['orderitems']
 
         with transaction.atomic():
+            Basket.objects.filter(user=self.request.user).delete()
             form.instance.user = self.request.user  # Присваиваем пользователя
             self.object = form.save()
             if orderitems.is_valid():  # Проверка валидации
                 orderitems.instance = self.object
                 orderitems.save()
 
-        # Удаление пустого заказа ОШИБКА RELAITEDNAMES
         if self.object.get_total_cost() == 0:
             self.object.delete()
 
@@ -70,9 +72,12 @@ class OrderItemsUpdateView(UpdateView):
         OrderFormSet = inlineformset_factory(Order, OrderItem, OrderItemForm, extra=1)
 
         if self.request.POST:
-            formset = OrderFormSet(self.request.POST)
+            formset = OrderFormSet(self.request.POST, instance=self.object)
         else:
-            formset = OrderFormSet()
+            formset = OrderFormSet(instance=self.object)
+            for form in formset.forms:
+                if form.instance.pk:
+                    form.initial['price'] = form.instance.product.price
 
         context_data['orderitems'] = formset
         return context_data
@@ -82,13 +87,12 @@ class OrderItemsUpdateView(UpdateView):
         orderitems = context['orderitems']
 
         with transaction.atomic():
-            form.instance.user = self.request.user  # Присваиваем пользователя
             self.object = form.save()
             if orderitems.is_valid():  # Проверка валидации
                 orderitems.instance = self.object
+                print(self.object)
                 orderitems.save()
 
-        # Удаление пустого заказа ОШИБКА RELAITEDNAMES заменил select_related() на all()
         if self.object.get_total_cost() == 0:
             self.object.delete()
 
@@ -113,3 +117,20 @@ def order_forming_complete(request, pk):
     order.status = Order.STATUS_SENT_TO_PROCEED
     order.save()
     return HttpResponseRedirect(reverse('order:order_list'))
+
+
+@receiver(pre_save, sender=OrderItem)
+@receiver(pre_save, sender=Basket)
+def product_quantity_update_save(sender, instance, **kwargs):
+    if instance.pk:
+        instance.product.quantity += instance.quantity - instance.get_item(instance.pk).quantity
+    else:
+        instance.product.quantity += instance.quantity
+    instance.product.save()
+
+
+@receiver(pre_delete, sender=OrderItem)
+@receiver(pre_delete, sender=Basket)
+def product_quantity_update_delete(sender, instance, **kwargs):
+    instance.product.quantity += instance.quantity
+    instance.product.save()

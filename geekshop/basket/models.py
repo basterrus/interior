@@ -34,6 +34,7 @@ class Basket(models.Model):
         _totalcost = sum(list(map(lambda x: x.product_cost, _items)))
         return _totalcost
 
-    @classmethod
-    def get_items(cls, user):
-        pass
+    @property
+    def get_item(self):
+        _item = Basket.objects.filter(user=self.user)
+        return _item
