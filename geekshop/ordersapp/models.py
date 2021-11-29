@@ -46,14 +46,6 @@ class Order(models.Model):
         _items = self.orderitems.all()
         return sum(list(map(lambda x: x.quantity * x.product.price, _items)))
 
-    def delete(self, *args, **kwargs):
-        for item in self.orderitems.all():
-            item.product.quantity += item.quantity
-            item.product.save()
-
-        self.is_active = False
-        self.save()
-
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='orderitems', on_delete=models.CASCADE)
@@ -62,7 +54,6 @@ class OrderItem(models.Model):
 
     class Meta:
         ordering = ('-order',)
-        # Поправить названия
         verbose_name = 'ордер'
         verbose_name_plural = 'ордеры'
 
@@ -72,3 +63,7 @@ class OrderItem(models.Model):
     @property
     def product_cost(self):
         return self.product.price * self.quantity
+
+    @staticmethod
+    def get_item(pk):
+        return OrderItem.objects.get(pk=pk)
