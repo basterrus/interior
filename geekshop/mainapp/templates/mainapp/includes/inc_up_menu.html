@@ -1,56 +1,49 @@
+{% load temp_tags %}
+
 <a href="{% url 'main' %}" class="logo"></a>
+
 <ul class="menu">
-    <li>
-        <a href="{% url 'main' %}"{% if request.resolver_match.url_name == 'main' %} class="active"{% endif %}>домой</a>
+    <li><a href="{% url 'main' %}"{% if request.resolver_match.url_name == 'main' %} class="active"{% endif %}>домой</a>
     </li>
-    <li>
-        <a href="{% url 'products:category' 0 %}" {% if request.resolver_match.namespace == 'products' %}
-           class="active" {% endif %}>продукты</a>
-    </li>
-
-    <li>
-        <a href="{% url 'contact' %}" {% if request.resolver_match.url_name == 'contact' %} class="active" {% endif %}>контакты</a>
+    <li><a href="{% url 'products:category' 0 %}" {% if request.resolver_match.namespace == 'products' %}
+           class="active" {% endif %}>продукты</a></li>
+    <li><a href="{% url 'contact' %}" {% if request.resolver_match.url_name == 'contact' %} class="active" {% endif %}>контакты</a>
     </li>
 
 
-    {% if user.is_authenticated %}
-        <li>
+    <li>
+        {% if user.is_authenticated %}
             <div class="dropdown">
-                <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                <a class="dropdown-toggle" href="#" data-toggle="dropdown"><img src="{{ user.avatar|media_for_users}}"
+                                                                                alt="mdo" width="32" height="32" class="rounded-circle">
                     {{ user.first_name|default:'Пользователь' }}
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
+
                     <li><a href="{% url 'ordersapp:order_list' %}">заказы</a></li>
                     <li><a href="{% url 'auth:edit' %}">профиль</a></li>
                     {% if user.is_superuser %}
                         <li><a href="{% url 'adminapp:users_list' %}">Админ. панель</a></li>
-
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a href="{% url 'auth:logout' %}">Выход</a></li>
                     {% endif %}
                 </ul>
             </div>
-        </li>
-        <li>
-            <a href="{% url 'auth:logout' %}">Выход</a>
-        </li>
-
-
-    {% else %}
-        <li>
-            <a href="{% url 'auth:login' %}">Вход</a>
-        </li>
-    {% endif %}
-
-
+            </li>
+        {% else %}
+            <li>
+                <a href="{% url 'auth:login' %}">Вход</a>
+            </li>
+        {% endif %}
 </ul>
 
-<a href="#" class="search"></a>
-<a href="{% url 'basket:view' %}" class="basket">
-  <span>
+    <a href="#" class="search"></a>
+    <a href="{% url 'basket:basket' %}" class="basket">
+  <span class="fw-bold">
     {% if basket %}
         {{ basket.0.total_cost|floatformat:0 }} руб
         ({{ basket.0.total_quantity }} шт)
     {% endif %}
   </span>
-
 </a>

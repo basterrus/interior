@@ -1,52 +1,58 @@
 {% extends 'mainapp/temp.html' %}
 {% load static %}
 {% load temp_tags %}
+
+{% block menu %}
+    <div class="hero-white">
+        <div class="header clearfix">
+            {% include 'mainapp/includes/inc_up_menu.html' %}
+        </div>
+    </div>
+{% endblock %}
+
 {% block content %}
-  <div class="details">
-    <div class="links clearfix">
-      {% include 'mainapp/includes/inc_menu_categories.html' %}
+    <div class="details">
+        <div class="links clearfix">
+            {% include 'mainapp/includes/inc_menu_categories.html' %}
+        </div>
+
+        <div class="details-products d-flex">
+            <div class="details-slider">
+                <div class="slider-product">
+                    <img src="{{ product.image| media_for_products }}" width="300px">
+                </div>
+                <div class="slider-control">
+                    <div class="block">
+                        <a href="#"><img src="{% static 'img/controll.jpg' %}" alt="">
+                            <div class="text"></div>
+                        </a>
+                    </div>
+                    <div class="block">
+                        <a href="#"><img src="{% static 'img/controll1.jpg' %}" alt="">
+                            <div class="text"></div>
+                        </a>
+                    </div>
+                    <div class="block">
+                        <a href="#"><img src="{% static 'img/controll2.jpg' %}" alt="">
+                            <div class="text"></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="description">
+                <h3 class="big-bold">{{ product.name }}</h3>
+                <h3 class="red">горячее предложение</h3>
+                <p class="price"> {{ product.price|floatformat:2 }} <span>руб</span></p>
+                <a href="{% url 'basket:add' product.pk %}" class="red-button">
+                    заказать <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                </a>
+                <div class="description-text fs-5"><b>Описание:</b>
+                    <p>{{ product.short_desc }}</p>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <div class="details-products">
-      <div class="details-slider">
-        <div class="slider-product">
-          <img src="/media/{{ product.image }}"
-               alt="{{ product.short_desc }}">
-        </div>
-        <div class="slider-control">
-          <div class="block">
-            <a href="#">
-              <img src="{{ product.image| media_for_products }}" alt="вариант 1">
-            </a>
-          </div>
-          <div class="block">
-            <a href="#">
-              <img src="{{ product.image | media_for_products}}" alt="вариант 2">
-            </a>
-          </div>
-          <div class="block">
-            <a href="#">
-              <img src="{{ product.image | media_for_products }}" alt="вариант 3">
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="description">
-        <h3 class="big-bold">{{ product.name }}</h3>
-        <br>
-        <p class="price"> {{ product.price }} <span>руб</span></p>
-        <a href="{% url 'basket:add' product.pk %}" class="red-button">
-          заказать
-          <i class="fa fa-chevron-right" aria-hidden="true"></i>
-        </a>
-        <div class="description-text">
-          {{ product.description }}
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="clr"></div>
 {% endblock %}

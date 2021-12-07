@@ -4,12 +4,12 @@
 
 {% block content %}
     <div class="container">
-        <p class="fs-2 text-uppercase pt-4" style="text-align: center">Редактирование профиля</p>
+        <p class="fs-2 text-uppercase" style="text-align: center">Редактирование профиля</p>
         <div class="login">
             {% if user.avatar %}
                 <img class="form border" src="/media/{{ user.avatar }}" width="300px" alt="avatar">
             {% else %}
-                <img src="{{ user.avatar_url }}" alt="img">
+                <img src="{{ user.avatar_url| media_for_users }}" alt="img" width="200px">
             {% endif %}
             <form class="form-horizontal" action="{% url 'auth:edit' %}" method="post"
                   enctype="multipart/form-data">
@@ -19,8 +19,8 @@
                 <br>
                 <input class="btn btn-primary" type="submit" value="СОХРАНИТЬ">
             </form>
-            <button class="btn btn-default btn-round">
-                <a href="{% url 'main' %}">
+            <button class="btn border col-3" style="text-decoration: none; text-decoration: white;">
+                <a href="{% url 'mainapp:index' %}">
                     на главную
                 </a>
             </button>

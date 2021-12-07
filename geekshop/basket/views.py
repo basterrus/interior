@@ -7,11 +7,10 @@ from django.http import JsonResponse
 
 
 @login_required
-def view(request, pk=None):
-    title = 'Корзина товаров'
-    basket_items = Basket.objects.filter(user=request.user).order_by('product__category')
+def basket(request):
+    basket_items = Basket.objects.filter(user=request.user)
     context = {
-        'title': title,
+        'title': 'Корзина товаров',
         'basket_items': basket_items,
     }
     return render(request, 'basket/basket.html', context)
@@ -43,16 +42,15 @@ def remove(request, pk):
 def edit(request, pk, quantity):
     if request.is_ajax():
         quantity = int(quantity)
-        basket_item = Basket.objects.get(pk=int(pk))
+        basket_item = Basket.objects.get(pk=pk)
 
         if quantity > 0:
             basket_item.quantity = quantity
             basket_item.save()
-
         else:
             basket_item.delete()
 
-    basket_item = Basket.objects.filter(user=request.user).order_by('product__category')
+    basket_item = Basket.objects.filter(user=request.user)
 
     context = {
         'basket_item': basket_item,

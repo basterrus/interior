@@ -2,11 +2,11 @@
 
 {% block content %}
     <div class="container">
+      {% csrf_token %}
         <div class="">
             Уверены, что хотите удалить учетную запись {{ object_list.name }}??
         </div>
     <form method="post">
-    {% csrf_token %}
         <input type="submit" class="btn btn-danger" value="Да">
     </form>
     <a href="{% url 'adminapp:category_list' %}" class="btn btn-success">Нет</a>

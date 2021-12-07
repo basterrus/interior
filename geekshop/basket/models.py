@@ -6,10 +6,8 @@ from mainapp.models import Product, ProductCategory
 class Basket(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='basket')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveSmallIntegerField(default=0)
-    add_datatime = models.DateTimeField(auto_now_add=True)  #TODO Заменить название поля на add_datetime
-
-
+    quantity = models.PositiveIntegerField(default=0, verbose_name='количество')
+    add_datatime = models.DateTimeField(auto_now_add=True, verbose_name='время')  #TODO Заменить название поля на add_datetime
 
     class Meta:
         verbose_name = 'Корзина'

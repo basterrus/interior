@@ -14,7 +14,7 @@ def get_hot_product():
 
 
 def get_same_products(hot_product):
-    same_products = Product.objects.filter(category=hot_product.category).exclude(pk=hot_product.pk)[:3]
+    same_products = Product.objects.filter(category=hot_product.category).exclude(pk=hot_product.pk).select_related()[:3]
     return same_products
 
 
@@ -26,7 +26,7 @@ class MainView(ListView):
     def get_context_data(self, *args, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data['title'] = 'Главная страница'
-        context_data['links_menu'] = Product.objects.all()[:4]
+        context_data['popular_product'] = Product.objects.all()[:4]
         return context_data
 
 
@@ -36,38 +36,41 @@ def contacts_list(request):
     }
     return render(request, 'mainapp/contact.html', context)
 
-class ProductsView(ListView):
-    form = Product
-    template_name = 'mainapp/products_list.html'
-
-    def get_queryset(self):
-        return super(ProductsView, self).get_queryset().all()
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(ProductsView, self).get_context_data(**kwargs)
-        context['title'] = 'Товары'
-        pk = get_object_or_404(Product, pk=self.kwargs.get('pk'))
-
-        if pk is not None:
-            if pk == 0:
-                context['product_list'] = Product.objects.all()
-                category = {
-                    'name': 'все',
-                    'pk': 0,
-                }
-            else:
-                category = get_object_or_404(ProductCategory, pk=pk)
-                product_list = Product.objects.filter(category__pk=pk)
-
-        return context
+#
+# class ProductsView(ListView):
+#     form = Product
+#     template_name = 'mainapp/products_list.html'
+#
+#     def get_queryset(self):
+#         return super(ProductsView, self).get_queryset().all()
+#
+#     def get_context_data(self, *args, **kwargs):
+#         context = super(ProductsView, self).get_context_data(**kwargs)
+#         context['title'] = 'Товары'
+#         pk = get_object_or_404(Product, pk=self.kwargs.get('pk'))
+#
+#         if pk is not None:
+#             if pk == 0:
+#                 context['product_list'] = Product.objects.all()
+#                 category = {
+#                     'name': 'все',
+#                     'pk': 0,
+#                 }
+#             else:
+#                 category = get_object_or_404(ProductCategory, pk=pk)
+#                 product_list = Product.objects.filter(category__pk=pk)
+#
+#         return context
 
 
 def products(request, pk=None, page=1):
+    print(pk)
     title = 'Продукты'
     links_menu = ProductCategory.objects.all()
     if pk is not None:
         if pk == 0:
             product_list = Product.objects.all()
+
             category = {
                 'name': 'все',
                 'pk': 0,
@@ -110,7 +113,6 @@ def products(request, pk=None, page=1):
 def product(request, pk):
     title = 'Продукты'
     context = {
-        'links_menu': ProductCategory.objects.all(),
         'title': title,
         'product': get_object_or_404(Product, pk=pk),
     }

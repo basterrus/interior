@@ -27,9 +27,10 @@
         <div class="clearfix">
         </div>
         <div class="tab-content">
-            {% for product in links_menu %}
+            {% for product in popular_product %}
             <div class="block">
                 <a href="#"><img src="{{ product.image | media_for_products }}" width="200px" height="200px" alt="img">
+{#                <a href="{% url 'mainapp:product' product.pk %}"><img src="{{ product.image | media_for_products }}" width="200px" height="200px" alt="img">#}
                     <div class="text">
                         <h4>{{ product.name }}</h4>
                         <h5> {{ product.price }}руб. </h5>

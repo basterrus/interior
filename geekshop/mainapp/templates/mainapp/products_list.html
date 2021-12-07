@@ -23,8 +23,9 @@
             <div class="category-products clearfix">
                 {% for product in product_list %}
                     <div class="block">
-                        <a href="{% url 'basket:add' product.pk %}">
-                            <img src="{{ product.image | media_for_products }}" width="250px" alt="{{ product.short_desc }}">
+                        <a href="{% url 'mainapp:product' product.pk %}">
+                            <img src="{{ product.image | media_for_products }}" width="250px"
+                                 alt="{{ product.short_desc }}">
                             <div class="text">
                                 <img src="{% static 'img/icon-hover.png' %}" alt="hover">
                                 <h4>{{ product.name }}</h4>
@@ -35,19 +36,28 @@
                 {% endfor %}
             </div>
 
-        <div class="paginator">
+            <div class="paginator">
 
-                    {% if product_list.has_previous %}
-                        <a href="{% url 'mainapp:category_page' category.pk product_list.previous_page_number %}"> <<< </a>
-                    {% endif %}
-                       &nbsp <span class="current"> страница {{ product_list.number }} из {{ product_list.paginator.num_pages }} </span> &nbsp
-                    {% if product_list.has_next %}
-                        <a href="{% url 'mainapp:category_page' category.pk product_list.next_page_number %}"> >>> </a>
-                    {% endif %}
 
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        {% if product_list.has_previous %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="{% url 'mainapp:category_page' category.pk product_list.previous_page_number %}">Previous</a>
+                            </li>
+                        {% endif %}
+                        <li class="page-item"><a class="page-link"
+                                                 href="{{ product_list.number }}">Страница {{ product_list.number }} из  {{ product_list.paginator.num_pages }}</a></li>
+                        {% if product_list.has_next %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="{% url 'mainapp:category_page' category.pk product_list.next_page_number %}">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
         </div>
-    </div>
 
-    <div class="clr"></div>
+        <div class="clr"></div>
 
 {% endblock %}
