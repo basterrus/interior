@@ -78,11 +78,9 @@ DATABASES = {
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
     'default': {
-        'NAME': 'geekshop',
         'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'geekshop',
         'USER': 'django',
-        'PASSWORD': 'geekbrains',
-        'HOST': 'localhost'
     }
 }
 
