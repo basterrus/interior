@@ -34,15 +34,11 @@ class Order(models.Model):
     def __str__(self):
         return f'Текущий заказ {self.id}'
 
-    def get_total_quantity(self):
+    def total_quantity(self):
         _items = self.orderitems.all()
         return sum(list(map(lambda x: x.quantity, _items)))
 
-    def get_product_type_quantity(self, *args, **kwargs):
-        _items = self.orderitems.all()
-        return len(_items)
-
-    def get_total_cost(self, *args, **kwargs):
+    def total_cost(self):
         _items = self.orderitems.all()
         return sum(list(map(lambda x: x.quantity * x.product.price, _items)))
 

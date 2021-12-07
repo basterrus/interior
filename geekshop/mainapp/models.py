@@ -36,3 +36,7 @@ class Product(models.Model):
         verbose_name_plural = 'Продукты'
         ordering = ('-id',)
 
+    @staticmethod
+    def get_items():
+        return Product.objects.filter(is_active=True). \
+            order_by('category', 'name')

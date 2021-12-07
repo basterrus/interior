@@ -56,7 +56,7 @@ class OrderItemsCreateView(CreateView, ):
                 orderitems.instance = self.object
                 orderitems.save()
 
-        if self.object.get_total_cost() == 0:
+        if self.object.total_cost() == 0:
             self.object.delete()
 
         return super().form_valid(form)
@@ -93,7 +93,7 @@ class OrderItemsUpdateView(UpdateView):
                 print(self.object)
                 orderitems.save()
 
-        if self.object.get_total_cost() == 0:
+        if self.object.total_cost() == 0:
             self.object.delete()
 
         return super().form_valid(form)
@@ -107,13 +107,13 @@ class OrderItemsDeleteView(DeleteView):
 class OrderItemsDetailView(DetailView):
     model = Order
 
-    def get_context_data(self, **kwargs):
-        context = super(OrderItemsDetailView, self).get_context_data(**kwargs)
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super(OrderItemsDetailView, self).get_context_data(**kwargs)
+    #     return context
 
 
 def order_forming_complete(request, pk):
-    order = get_object_or_404(Order, pk=pk)
+    order = Order.objects.get(pk=pk)
     order.status = Order.STATUS_SENT_TO_PROCEED
     order.save()
     return HttpResponseRedirect(reverse('order:order_list'))
@@ -123,9 +123,9 @@ def order_forming_complete(request, pk):
 @receiver(pre_save, sender=Basket)
 def product_quantity_update_save(sender, instance, **kwargs):
     if instance.pk:
-        instance.product.quantity += instance.quantity - instance.get_item(instance.pk).quantity
+        instance.product.quantity -= instance.quantity - instance.get_item(instance.pk).quantity
     else:
-        instance.product.quantity += instance.quantity
+        instance.product.quantity -= instance.quantity
     instance.product.save()
 
 
@@ -133,12 +133,12 @@ def product_quantity_update_save(sender, instance, **kwargs):
 @receiver(pre_delete, sender=Basket)
 def product_quantity_update_delete(sender, instance, **kwargs):
     instance.product.quantity += instance.quantity
-    instance.product.save(**kwargs)
+    instance.product.save()
 
 
 def get_product_price(request, pk):
     if request.is_ajax():
-        product_item = Product.objects.filter(pk=pk).first()
+        product_item = Product.objects.filter(pk=int(pk)).first()
         if product_item:
             return JsonResponse({'price': product_item.price})
         return JsonResponse({'price': 0})

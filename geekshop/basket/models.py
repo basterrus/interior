@@ -7,14 +7,15 @@ class Basket(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='basket')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0, verbose_name='количество')
-    add_datatime = models.DateTimeField(auto_now_add=True, verbose_name='время')  #TODO Заменить название поля на add_datetime
+    add_datatime = models.DateTimeField(auto_now_add=True,
+                                        verbose_name='время')  # TODO Заменить название поля на add_datetime
 
     class Meta:
         verbose_name = 'Корзина'
         verbose_name_plural = 'Корзина'
 
-    def __str__(self):
-        return f'Корзина пользователя {self.user.name} | Продукт {self.product.name}'
+    # def __str__(self):
+    #     return f'Корзина пользователя {self.user.name} | Продукт {self.product.name}'
 
     @property
     def product_cost(self):
@@ -23,16 +24,13 @@ class Basket(models.Model):
     @property
     def total_quantity(self):
         _items = Basket.objects.filter(user=self.user)
-        _totalquantity = sum(list(map(lambda x: x.quantity, _items)))
-        return _totalquantity
+        return sum(list(map(lambda x: x.quantity, _items)))
 
     @property
     def total_cost(self):
         _items = Basket.objects.filter(user=self.user)
-        _totalcost = sum(list(map(lambda x: x.product_cost, _items)))
-        return _totalcost
+        return sum(list(map(lambda x: x.product_cost, _items)))
 
     @property
     def get_item(self):
-        _item = Basket.objects.filter(user=self.user)
-        return _item
+        return Basket.objects.filter(user=self.user)
