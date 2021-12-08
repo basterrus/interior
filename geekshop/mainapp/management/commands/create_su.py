@@ -5,9 +5,9 @@ from django.core.management.base import BaseCommand
 class Command(BaseCommand):
     def handle(self, *args, **options):
         User = get_user_model()
-        if not User.objects.filter(username="admin").exists():
+        if not User.objects.filter(username="root").exists():
             User.objects.create_superuser(
-                "admin", "admin@domain.com", "admin", age=18)
+                "root", "admin@domain.com", "adminadmin", age=18)
             self.stdout.write(self.style.SUCCESS('Admin user has created'))
         else:
             self.stdout.write(self.style.SUCCESS('Admin user already exists'))
