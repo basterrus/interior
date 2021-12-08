@@ -9,7 +9,7 @@
     <div class="login">
     <form class="form-horizontal" action="{% url 'auth:register' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-
+        {{ register_form.as_p }}
         <input class="btn btn-primary" type="submit" value="Зарегистрироваться">
         <br><br>
         <a class="btn btn-primary" href="{% url 'auth:login' %}">Войти</a>
