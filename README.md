@@ -1,5 +1,6 @@
 # Проект по курсу обучения base_django_framework
 ## Интернет магазин GeekShop доступен по адресу http://185.46.10.69/
+`данные для входа: admin|admin`
 ### Разработка Павел Недошивин aka baster
 ![img](Screenshot.png)
 
