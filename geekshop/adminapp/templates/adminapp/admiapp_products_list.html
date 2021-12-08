@@ -11,7 +11,7 @@
         </button>
 
         {% for object in object_list %}
-            <div class="product_record">
+            <div class="product_record d-flex">
                 <img
                         src="{{ object.image|media_for_products }}"
                         alt="{{ object.name }}">
