@@ -50,7 +50,7 @@ def edit(request, pk, quantity):
         else:
             basket_item.delete()
 
-    basket_item = Basket.objects.filter(user=request.user)
+    basket_item = Basket.objects.filter(user=request.user).select_related()
 
     context = {
         'basket_item': basket_item,
