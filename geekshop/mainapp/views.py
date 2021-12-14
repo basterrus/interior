@@ -3,12 +3,16 @@ import random
 from django.conf import settings
 from django.core.cache import cache
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+
 from basket.models import Basket
 from django.shortcuts import render
 from mainapp.models import Product, ProductCategory
 from django.shortcuts import get_object_or_404
 from django.views.generic.list import ListView
 from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 
 def get_links_menu():
@@ -129,6 +133,7 @@ def contacts_list(request):
     return render(request, 'mainapp/contact.html', context)
 
 
+@cache_page(3600)
 def products(request, pk=None, page=1):
     print(pk)
     title = 'Продукты'
@@ -187,3 +192,40 @@ def product(request, pk):
     }
 
     return render(request, 'mainapp/product.html', context)
+
+
+def products_ajax(request, pk=None, page=1):
+    if request.is_ajax():
+        links_menu = get_links_menu()
+
+        if pk:
+            if pk == '0':
+                category = {
+                    'pk': 0,
+                    'name': 'все'
+                }
+                products = get_products_orederd_by_price()
+            else:
+                category = get_category(pk)
+                products = get_products_in_category_orederd_by_price(pk)
+
+            paginator = Paginator(products, 2)
+            try:
+                products_paginator = paginator.page(page)
+            except PageNotAnInteger:
+                products_paginator = paginator.page(1)
+            except EmptyPage:
+                products_paginator = paginator.page(paginator.num_pages)
+
+            content = {
+                'links_menu': links_menu,
+                'category': category,
+                'products': products_paginator,
+            }
+
+            result = render_to_string(
+                'mainapp/includes/inc_products_list_content.html',
+                context=content,
+                request=request)
+
+            return JsonResponse({'result': result})
