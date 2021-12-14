@@ -1,0 +1,9 @@
+http://185.46.10.69/
+http://185.46.10.69/products/
+http://185.46.10.69/products/category/0/
+http://185.46.10.69/contacts/
+http://185.46.10.69/order/order/
+http://185.46.10.69/order/read/60/
+http://185.46.10.69/auth/edit/
+http://185.46.10.69/admin/users/
+http://185.46.10.69/admin/categories/
