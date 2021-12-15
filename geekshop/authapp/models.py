@@ -42,7 +42,7 @@ class ShopUserProfile(models.Model):
         (OTHERS, 'Другое'),
     )
 
-    user = models.OneToOneField(UserProfile, null=False, unique=True, on_delete=models.CASCADE, db_index=True)
+    user = models.OneToOneField(UserProfile, null=False, unique=True, on_delete=models.CASCADE, db_index=True, )
     tagline = models.CharField(max_length=128, verbose_name='Тэги', blank=True)
     about_me = models.TextField(verbose_name='Обо мне')
     gender = models.CharField(choices=GENDERS, default=OTHERS, verbose_name='Пол', max_length=1)

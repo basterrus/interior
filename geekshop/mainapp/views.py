@@ -1,11 +1,12 @@
+import json
+import os
 import random
-
 from django.conf import settings
 from django.core.cache import cache
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-
 from basket.models import Basket
 from django.shortcuts import render
 from mainapp.models import Product, ProductCategory
@@ -13,6 +14,14 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.list import ListView
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+
+JSON_PATH = 'json_upload'
+
+
+def load_from_json(file_name):
+    with open(os.path.join(JSON_PATH, file_name + '.json'), 'r', encoding='utf-8') as infile:
+        print(infile)
+        return json.load(infile)
 
 
 def get_links_menu():
@@ -63,9 +72,9 @@ def get_product(pk):
         return get_object_or_404(Product, pk=pk)
 
 
-def get_products_orederd_by_price():
+def get_products_ordered_by_price():
     if settings.LOW_CACHE:
-        key = 'products_orederd_by_price'
+        key = 'products_ordered_by_price'
         products = cache.get(key)
         if products is None:
             products = Product.objects.filter(is_active=True, category__is_active=True).order_by('price')
@@ -75,9 +84,9 @@ def get_products_orederd_by_price():
         return Product.objects.filter(is_active=True, category__is_active=True).order_by('price')
 
 
-def get_products_in_category_orederd_by_price(pk):
+def get_products_in_category_ordered_by_price(pk):
     if settings.LOW_CACHE:
-        key = f'products_in_category_orederd_by_price_{pk}'
+        key = f'products_in_category_ordered_by_price_{pk}'
         products = cache.get(key)
         if products is None:
             products = Product.objects.filter(category__pk=pk, is_active=True, category__is_active=True).order_by(
@@ -103,28 +112,25 @@ class MainView(ListView):
     form = Product
     template_name = 'mainapp/index.html'
     model = Product
+    is_home = Q(category__name='дом')
+    is_office = Q(category__name='офис')
 
     def get_context_data(self, *args, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data['title'] = 'Главная страница'
-        context_data['popular_product'] = Product.objects.all()[:4]
+        context_data['popular_product'] = Product.objects.filter(self.is_home | self.is_office)
         return context_data
 
 
-def load_from_json(param):
-    pass
-
-
 def contacts_list(request):
-    title = 'о нас'
     if settings.LOW_CACHE:
         key = f'locations'
         locations = cache.get(key)
         if locations is None:
-            locations = load_from_json('contact__locations')
+            locations = load_from_json('contact')
             cache.set(key, locations)
     else:
-        locations = load_from_json('contact__locations')
+        locations = load_from_json('contact')
 
     context = {
         'title': 'Контакты',
@@ -135,7 +141,6 @@ def contacts_list(request):
 
 @cache_page(3600)
 def products(request, pk=None, page=1):
-    print(pk)
     title = 'Продукты'
     links_menu = get_links_menu()
     if pk is not None:
@@ -148,7 +153,7 @@ def products(request, pk=None, page=1):
             }
         else:
             category = get_category(pk)
-            product_list = get_products_in_category_orederd_by_price(pk)
+            product_list = get_products_in_category_ordered_by_price(pk)
 
         paginator = Paginator(product_list, 2)
 
@@ -194,38 +199,49 @@ def product(request, pk):
     return render(request, 'mainapp/product.html', context)
 
 
-def products_ajax(request, pk=None, page=1):
-    if request.is_ajax():
-        links_menu = get_links_menu()
+#
+# class ProductsListViewAjax(ListView):
+#     model = Product
+#
+#     def get_context_data(self, *args, **kwargs):
+#         context = super(ProductsListViewAjax, self).get_context_data(**kwargs)
+#         context['product_list'] = get_products_ordered_by_price()
+#
 
-        if pk:
-            if pk == '0':
-                category = {
-                    'pk': 0,
-                    'name': 'все'
-                }
-                products = get_products_orederd_by_price()
-            else:
-                category = get_category(pk)
-                products = get_products_in_category_orederd_by_price(pk)
 
-            paginator = Paginator(products, 2)
-            try:
-                products_paginator = paginator.page(page)
-            except PageNotAnInteger:
-                products_paginator = paginator.page(1)
-            except EmptyPage:
-                products_paginator = paginator.page(paginator.num_pages)
-
-            content = {
-                'links_menu': links_menu,
-                'category': category,
-                'products': products_paginator,
-            }
-
-            result = render_to_string(
-                'mainapp/includes/inc_products_list_content.html',
-                context=content,
-                request=request)
-
-            return JsonResponse({'result': result})
+# def products_ajax(request, pk=None, page=1):
+#     if request.is_ajax():
+#         links_menu = get_links_menu()
+#
+#         if pk:
+#             if pk == '0':
+#                 category = {
+#                     'pk': 0,
+#                     'name': 'все'
+#                 }
+#                 product_list = get_products_ordered_by_price()
+#             else:
+#                 category = get_category(pk)
+#                 product_list = get_products_in_category_ordered_by_price(pk)
+#
+#             paginator = Paginator(product_list, 2)
+#
+#             try:
+#                 products_paginator = paginator.page(page)
+#             except PageNotAnInteger:
+#                 products_paginator = paginator.page(1)
+#             except EmptyPage:
+#                 products_paginator = paginator.page(paginator.num_pages)
+#
+#             content = {
+#                 'links_menu': links_menu,
+#                 'category': category,
+#                 'products': products_paginator,
+#             }
+#
+#             result = render_to_string(
+#                 'mainapp/includes/inc_products_list_content.html',
+#                 context=content,
+#                 request=request)
+#
+#             return JsonResponse({'result': result})

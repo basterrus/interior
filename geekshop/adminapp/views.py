@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
 from django.utils.decorators import method_decorator
-
+from django.db.models import F
 from authapp.models import UserProfile
 from authapp.forms import UserRegisterForm
 from mainapp.models import ProductCategory, Product
@@ -92,6 +92,13 @@ class CategoryUpdateView(AccessMixin, UpdateView):
         context = super(CategoryUpdateView, self).get_context_data(**kwargs)
         context['title'] = 'Панель Админимтратора | Обновление категории'
         return context
+
+    def form_valid(self, form):
+        if 'discount' in form.cleaned_data:
+            discount = form.cleaned_data.get('discount')
+            if discount:
+                self.object.product_set.update(price=F('price') * (1 - discount / 100))
+        return super(CategoryUpdateView, self).form_valid(form)
 
 
 class CategoryDeleteView(AccessMixin, DeleteView):
