@@ -1,0 +1,20 @@
+[
+  {
+    "phone": "+7-999-888-8888",
+    "email": "msk@geekshop.ru",
+    "city": "Москва",
+    "address": "Ленина 335"
+  },
+  {
+    "phone": "+7-777-777-7777",
+    "email": "ekb@geekshop.ru",
+    "city": "Екатеринбург",
+    "address": "Ленина 28"
+  },
+  {
+    "phone": "+7-999-999-9999",
+    "email": "chel@geekshop.ru",
+    "city": "Челябинск",
+    "address": "Ленина 33"
+  }
+]

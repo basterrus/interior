@@ -1,0 +1,51 @@
+{% load static %}
+{% load temp_tags %}
+
+
+
+<div class="links clearfix">
+            {% include 'mainapp/includes/inc_menu_categories.html' %}
+        </div>
+
+        <div class="products_list">
+            <div class="title clearfix">
+                <h2>Категория: "{{ category.name|title }}"</h2> <br><br>
+
+            </div>
+            <div class="category-products clearfix">
+                {% for product in product_list %}
+                    <div class="block">
+                        <a href="{% url 'mainapp:product' product.pk %}">
+                            <img src="{{ product.image | media_for_products }}" width="250px"
+                                 alt="{{ product.short_desc }}">
+                            <div class="text">
+                                <img src="{% static 'img/icon-hover.png' %}" alt="hover">
+                                <h4>{{ product.name }}</h4>
+                                <p>{{ product.short_desc }}</p>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="paginator">
+
+
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        {% if product_list.has_previous %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="{% url 'mainapp:category_page' category.pk product_list.previous_page_number %}">Previous</a>
+                            </li>
+                        {% endif %}
+                        <li class="page-item"><a class="page-link"
+                                                 href="{{ product_list.number }}">Страница {{ product_list.number }} из  {{ product_list.paginator.num_pages }}</a></li>
+                        {% if product_list.has_next %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="{% url 'mainapp:category_page' category.pk product_list.next_page_number %}">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
