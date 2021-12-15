@@ -15,9 +15,6 @@ class Basket(models.Model):
         verbose_name = 'Корзина'
         verbose_name_plural = 'Корзина'
 
-    # def __str__(self):
-    #     return f'Корзина пользователя {self.user.name} | Продукт {self.product.name}'
-
     @cached_property
     def items_cached(self):
         return self.user.basket.select_related()
@@ -39,3 +36,7 @@ class Basket(models.Model):
     @property
     def get_item(self):
         return Basket.objects.filter(user=self.user)
+
+    @staticmethod
+    def get_product(user, product):
+        return Basket.objects.filter(user=user, product=product)

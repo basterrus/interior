@@ -2,10 +2,21 @@
 {% load static %}
 
 {% block content %}
-  <div class="basket_item">
-    <br><br>{% include 'basket/includes/inc_basket_list.html' %}
-    <button class="btn btn-round">
-      <a href="{% url 'mainapp:index' %}">на главную</a>
-    </button>
-  </div>
+    <div class="basket_item ">
+        {% if basket_items %}
+            {% include 'basket/includes/inc_basket_list.html' %}
+
+        {% else %}
+            <h1>Корзина пуста</h1>
+        {% endif %}
+        <button class="btn btn-round">
+            <a href="{% url 'mainapp:index' %}">на главную</a>
+        </button>
+        <button class="btn btn-default btn-round">
+            <a href="{% url 'ordersapp:order_create' %}" class="btn border-danger border-2">
+                новый
+            </a>
+        </button>
+
+    </div>
 {% endblock %}

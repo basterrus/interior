@@ -9,7 +9,7 @@ from django.http import JsonResponse
 
 @login_required
 def basket(request):
-    basket_items = Basket.get_product(user=request.user)
+    basket_items = Basket.objects.filter(user=request.user)
     context = {
         'title': 'Корзина товаров',
         'basket_items': basket_items,
@@ -26,7 +26,8 @@ def add(request, pk):
     if not basket_item:
         basket_item = Basket(product=product_item, user=request.user)
 
-    basket_item.quantity += F('quantity') + 1
+    # basket_item.quantity = F('quantity') + 1
+    basket_item.quantity += 1
     basket_item.save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
