@@ -41,6 +41,8 @@ ___
 
 ### Создать и активировать виртуальное окружение Python.
 
+### Создать файл `.env` по примеру `.env.sample`
+
 ### Установить зависимости из файла requirements.txt:
 `pip install -r requirements.txt`
 
