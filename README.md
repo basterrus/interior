@@ -65,6 +65,6 @@ ___
 #### Стандартная админ панель Django доступна по адресу http://127.0.0.1:8000/control/
  
 ___
-<img src="Screenshot_9.png" width="380" height="380" /> <img src="Screenshot_12.png" width="380" height="380" />
+<img src="Screenshot_9.png" width="380" height="300" /> <img src="Screenshot_12.png" width="380" height="300" />
 
 
