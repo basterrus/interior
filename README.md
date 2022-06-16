@@ -1,7 +1,6 @@
 # Проект по курсу обучения base_django_framework
 ## Интернет магазин INTERIOR
 `данные для входа: root|adminadmin`
-### Разработка Павел Недошивин aka baster
 ![img](Screenshot.png)
 
 ## relies notes:
